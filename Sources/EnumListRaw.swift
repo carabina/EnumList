@@ -8,7 +8,11 @@
 
 import UIKit
 
-public struct EnumListStringRaw<T:EnumValues>: ExpressibleByStringLiteral, Equatable{
+public protocol EnumListStringRawable{
+    init(stringLiteral value: String)
+}
+
+public struct EnumListStringRaw<T:EnumValues>: EnumListStringRawable, ExpressibleByStringLiteral, Equatable{
     let a:T.RawType?
     
     public static func ==(lhs: EnumListStringRaw<T>, rhs: EnumListStringRaw<T>) -> Bool {
@@ -34,8 +38,11 @@ public struct EnumListStringRaw<T:EnumValues>: ExpressibleByStringLiteral, Equat
 }
 
 
+public protocol EnumListIntRawable{
+    init(integerLiteral value: Int)
+}
 
-public struct EnumListIntRaw<T:EnumValues>: ExpressibleByIntegerLiteral, Equatable{
+public struct EnumListIntRaw<T:EnumValues>: EnumListIntRawable, ExpressibleByIntegerLiteral, Equatable{
     let a:T.RawType?
     
     public static func ==(lhs: EnumListIntRaw<T>, rhs: EnumListIntRaw<T>) -> Bool {
