@@ -6,14 +6,20 @@
 //
 //
 
-import UIKit
+import Foundation
 
 public protocol EnumListStringRawable{
     init(stringLiteral value: String)
+    var value:String? {get}
 }
 
-public struct EnumListStringRaw<T:EnumValues>: EnumListStringRawable, ExpressibleByStringLiteral, Equatable{
-    let a:T.RawType?
+public struct EnumListStringRaw<T:StringEnumValues>: EnumListStringRawable, ExpressibleByStringLiteral, Equatable{
+    public var value: String?{
+        return a
+    }
+    
+    
+    let a:String?
     
     public static func ==(lhs: EnumListStringRaw<T>, rhs: EnumListStringRaw<T>) -> Bool {
         if let lhsA = lhs.a { T.allRaws.insert(lhsA)}
@@ -23,13 +29,13 @@ public struct EnumListStringRaw<T:EnumValues>: EnumListStringRawable, Expressibl
     }
     
     public init(stringLiteral value: String){
-        a = T.RawType(value)
+        a = value
     }
     public init(extendedGraphemeClusterLiteral value: String){
-        a = T.RawType(value)
+        a = value
     }
     public init(unicodeScalarLiteral value: String){
-        a = T.RawType(value)
+        a = value
     }
     
     init(){
@@ -40,10 +46,15 @@ public struct EnumListStringRaw<T:EnumValues>: EnumListStringRawable, Expressibl
 
 public protocol EnumListIntRawable{
     init(integerLiteral value: Int)
+    var value:Int? {get}
 }
 
-public struct EnumListIntRaw<T:EnumValues>: EnumListIntRawable, ExpressibleByIntegerLiteral, Equatable{
-    let a:T.RawType?
+public struct EnumListIntRaw<T:IntEnumValues>: EnumListIntRawable, ExpressibleByIntegerLiteral, Equatable {
+    public var value: Int?{
+        return a
+    }
+    
+    let a:Int?
     
     public static func ==(lhs: EnumListIntRaw<T>, rhs: EnumListIntRaw<T>) -> Bool {
         if let lhsA = lhs.a { T.allRaws.insert(lhsA)}
@@ -52,7 +63,7 @@ public struct EnumListIntRaw<T:EnumValues>: EnumListIntRawable, ExpressibleByInt
         return lhs.a == rhs.a
     }
     public init(integerLiteral value: Int){
-        a = T.RawType(value)
+        a = value
     }
     
     init(){
