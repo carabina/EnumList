@@ -46,11 +46,11 @@ $ pod install
 
 In order to make your `enum` (with `String` rawValue) compatible with `EnumList`, add conformance to protocols `EnumListStringRaw<NAME_OF_YOUR_ENUM.Values>, RawRepresentable` and define nested struct `Values`. 
 
-*Althouh you have free choose the name and place to define `struct` that conformances to `EnumValues` (e.g. `YourEnumName.Values`), it is recommended to keep it as a nested type.*
+*Althouh you have free choose the name and place to define `struct` that conformances to `StringEnumValues` or `IntEnumValues` (e.g. `YourEnumName.Values`), it is recommended to keep it as a nested type.*
 
 ```swift
 private enum YourEnumName: EnumListStringRaw<YourEnumName.Values>, RawRepresentable{
-   struct Values:EnumValues {
+   struct Values:StringEnumValues {
       typealias Element = YourEnumName
       static var allRaws:Set<String> = []
    }
@@ -93,7 +93,7 @@ let myOtherCase = YourEnumName(raw: "case1") // myOtherCase = .caseNo1
 
 ```swift
 private enum YourIntEnum: EnumListStringRaw<YourIntEnum.Values>, RawRepresentable{
-   struct Values:EnumValues {
+   struct Values:IntEnumValues {
       typealias Element = YourIntEnum
       static var allRaws:Set<Int> = []
    }
@@ -114,7 +114,7 @@ Same as with standard `enum`, you don't need to specify all rawValues manually. 
 
 ```swift
 private enum YourEnumName: EnumListStringRaw<YourEnumName.Values>, RawRepresentable{
-  struct Values:EnumValues {
+  struct Values:StringEnumValues {
     typealias Element = YourEnumName
     static var allRaws:Set<String> = []
   }
@@ -138,12 +138,28 @@ Swift does not allow to create several `enum` cases with same literal. It applie
 
 ```swift
 private enum YourEnumName: EnumListStringRaw<YourEnumName.Values>, RawRepresentable{
-  struct Values:EnumValues {
+  struct Values:StringEnumValues {
     typealias Element = YourEnumName
     static var allRaws:Set<String> = []
   }
   case caseNo1 = "case1"
   //case caseNo2 = "case1" - compile error: RawValues have to be unique
+}
+```
+
+### Swift 4 compatibility
+
+`EnumList` is compatible with Swift4 out-of-the box.
+
+In addition, it supports `Codable` protocol as seamlessly as "normal" enums --- just add conformance to `Codable` (or separatelly `Encodable` and/or `Decodable`):
+```swift
+private enum YourEnumName: EnumListStringRaw<YourEnumName.Values>, RawRepresentable, Codable{
+  struct Values:StringEnumValues {
+    typealias Element = YourEnumName
+    static var allRaws:Set<String> = []
+  }
+  case caseNo1 = "case1"
+  case caseNo2 = "case2"
 }
 ```
 
@@ -162,7 +178,7 @@ then by conforming your enum to `UnboxableEnum`, it works out of a box:
 
 ```swift 
 private enum EnumForUnbox: EnumListStringRaw<EnumForUnbox.Values>, RawRepresentable, UnboxableEnum{
-  struct Values:EnumValues {
+  struct Values:StringEnumValues {
     typealias Element = EnumForUnbox
     static var allRaws:Set<String> = []
   }
